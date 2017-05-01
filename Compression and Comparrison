@@ -1,0 +1,23 @@
+playerAnswer = ["1","0","1","1","0"]
+answer = {"10110":"Question 1"}
+
+def combineAnswer(playerAnswer):            # this subroutine condenses the playerAnswer list
+                                            # into a string and re-enters the answer as a list
+    playerAnswer_str = ''.join(map(str, playerAnswer))
+    playerAnswer = [playerAnswer_str]       # so that it can be compared to the answer key
+    return playerAnswer
+
+def compareAnswers(playerAnswer, answer):
+    if playerAnswer == answer.keys():
+        print "is equal to"
+    else:
+        print "is not equal to"
+
+playerAnswer = combineAnswer(answer)
+print playerAnswer
+compareAnswers(playerAnswer,answer)
+print answer.keys()
+
+
+########################################################################
+
