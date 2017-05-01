@@ -1,22 +1,25 @@
-playerAnswer = ["1","0","1","1","0"]
-answer = {"10110":"Question 1"}
-
-def combineAnswer(playerAnswer):            # this subroutine condenses the playerAnswer list
-                                            # into a string and re-enters the answer as a list
-    playerAnswer_str = ''.join(map(str, playerAnswer))
-    playerAnswer = [playerAnswer_str]       # so that it can be compared to the answer key
+playerAnswer = ["1","0","1","1","0"]        # This variable is a placeholder for what the player's
+                                            # input will be.
+answer = {"10110":"Question 1","00101":"Question 2","10000":"Question 3"}
+a = 2                                       # This Variable is a placeholder for the number
+                                            # that will represent which item in the dictionary
+                                            # is selected. It can be 2, 1, or 0 right now.
+                                            
+def combineAnswer(playerAnswer):            # This subroutine condenses the playerAnswer list
+                                            # into a string.
+    playerAnswer = ''.join(map(str, playerAnswer))
     return playerAnswer
 
-def compareAnswers(playerAnswer, answer):
-    if playerAnswer == answer.keys():
-        print "is equal to"
+def compareAnswers(playerAnswer, answer):   # This subroutine compares the answer provided by 
+    if playerAnswer == answer.keys()[a]:    # the player to the answer in the key of the Riddle
+        print "is equal to"                 # dictionary.
     else:
         print "is not equal to"
 
-playerAnswer = combineAnswer(answer)
+playerAnswer = combineAnswer(playerAnswer)
 print playerAnswer
 compareAnswers(playerAnswer,answer)
-print answer.keys()
+print answer.keys()[a]
 
 
 ########################################################################
