@@ -1,0 +1,68 @@
+from random import randint
+import RPi.GPIO as GPIO
+import time
+
+playerAnswer = []                           # This variable is what the player's input will be.
+answer = {"10110":"Question 1","00101":"Question 2","10000":"Question 3"}
+a = randint(0,2)                            # This Variable is a placeholder for the number
+                                            # that will represent which item in the dictionary
+                                            # is selected. It can be 2, 1, or 0 right now.
+
+##Switch 17 should input a 1 to the playerAnswer array.
+##Switch 27 should input a 0 to the playerAnswer array.
+##Switch 22 should clear the playerAnswer array.
+##Switch 5 should submit the answer listed in the playerAnswer array.
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+             
+def combineAnswer(playerAnswer):            # This subroutine condenses the playerAnswer list
+                                            # into a string.
+    playerAnswer = ''.join(map(str, playerAnswer))
+    return playerAnswer
+
+def compareAnswers(playerAnswer, answer):   # This subroutine compares the answer provided by 
+    if playerAnswer == answer.keys()[a]:    # the player to the answer in the key of the Riddle
+        print "That is correct"             # dictionary.
+    else:
+        print "That is not correct"
+
+def submit(playerAnswer):
+    playerAnswer = combineAnswer(playerAnswer)
+    print "The correct answer is {}".format(answer.keys()[a])
+    print "Your answer is {}".format(playerAnswer)
+    compareAnswers(playerAnswer,answer)
+
+################################################################################################
+
+print answer.values()[a]
+
+while True:
+    Input_1 = GPIO.input(17)
+    Input_2 = GPIO.input(27)
+    Input_3 = GPIO.input(22)
+    Input_4 = GPIO.input(5)
+        
+    if Input_1 == False:
+        playerAnswer.append("1")
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_2 == False:
+        playerAnswer.append("0")
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_3 == False:
+        playerAnswer = []
+        print "your answer has been reset"
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_4 == False:
+        submit(playerAnswer)
+        print "Thanks for playing"
+        time.sleep(0.5)
+    else:
+        time.sleep(0.2)
