@@ -1,0 +1,85 @@
+from random import randint
+import RPi.GPIO as GPIO
+import time
+
+playerAnswer = []                           # This variable is the player's input.
+answer = {"111111111010001010101":"1 have a new fr1end. \
+The new fr1end plays a new game. \
+The new game 1s a l1ttle tr1ck1ng \
+The tr1ck 1s t0 f1nd the 0ne that's 0ut 0f place \
+W1th zer0 be1ng the 0bv10us ba1t","100101001100101110100":"1 c0mplement the tw0 that have ne1ther been 0ne \
+1 c0mplement the 0ne that w1ll never s1ng f0r y0u \
+1 c0mplement my style of r1ddle mak1ng w1th a clue \
+The answer cannot be the secret talk1ng t0 y0u","100100111010101011010":"1 L00k and see r1ddles that d0 n0t make any sense \
+The l1nes they rhyme, 1t passes t1me, but the c0ntext 1s s0 dense \
+1 d0n't understand the numbered band w1th le0pard hand \
+But 1 st1LL w0nder what 1t c0uld have meant"}
+a = randint(0,2)                            # This Variable is a placeholder for the number
+                                            # that will represent which item in the dictionary
+                                            # is selected. It can be 2, 1, or 0 right now.
+
+##Switch 17 should input a 1 to the playerAnswer array.
+##Switch 27 should input a 0 to the playerAnswer array.
+##Switch 22 should clear the playerAnswer array.
+##Switch 5 should submit the answer listed in the playerAnswer array.
+
+GPIO.setmode(GPIO.BCM)
+
+#LED outputs
+GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW)
+
+#Button Inputs
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(27, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+             
+def combineAnswer(playerAnswer):            # This subroutine condenses the playerAnswer list
+                                            # into a string.
+    playerAnswer = ''.join(map(str, playerAnswer))
+    return playerAnswer
+
+def compareAnswers(playerAnswer, answer):   # This subroutine compares the answer provided by 
+    if playerAnswer == answer.keys()[a]:    # the player to the answer in the key of the Riddle
+        print "That is correct"             # dictionary.
+        GPIO.output(23, GPIO.HIGH)
+    else:
+        print "That is not correct"
+        GPIO.output(24, GPIO.HIGH)
+
+def submit(playerAnswer):
+    playerAnswer = combineAnswer(playerAnswer)
+    print "The correct answer is {}".format(answer.keys()[a])
+    print "Your answer is {}".format(playerAnswer)
+    compareAnswers(playerAnswer,answer)
+
+################################################################################################
+
+print answer.values()[a]
+
+while True:
+    Input_1 = GPIO.input(17)
+    Input_2 = GPIO.input(27)
+    Input_3 = GPIO.input(22)
+    Input_4 = GPIO.input(5)
+        
+    if Input_1 == False:
+        playerAnswer.append("1")
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_2 == False:
+        playerAnswer.append("0")
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_3 == False:
+        playerAnswer = []
+        print "your answer has been reset"
+        print"{}".format(playerAnswer)
+        time.sleep(0.5)
+    elif Input_4 == False:
+        submit(playerAnswer)
+        print "Thanks for playing"
+        time.sleep(0.5)
+    else:
+        time.sleep(0.2)
